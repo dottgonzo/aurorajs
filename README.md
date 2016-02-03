@@ -1,0 +1,3 @@
+# aurorajs
+
+require aurora package
