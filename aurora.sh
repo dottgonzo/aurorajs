@@ -44,8 +44,10 @@ if [[ $addrs ]];then
 			if [[ $(echo /dev/$devname|grep -v hidraw|grep -v '/dev/usb' | grep -c '' ) > 0 ]];then
 				hub=$(echo $syspath | sed 's/\/sys\/bus\/usb\/devices\/usb//g' | sed 's/\// /g'| awk '{print($3)}')
 
+hubsplit=$(echo $hub|sed 's/:/ /g'|awk {'print($1)'})
 
-				if [[ $hub == $dev && $(echo $devname | sed 's/ty/ /g'|wc -w)>1 ]];then
+				if [[ ($hub == $dev || $hubsplit == $dev) && $(echo $devname | sed 's/ty/ /g'|wc -w)>1 ]];then
+
 					dev="/dev/$devname"
 					usb=1
 				fi
