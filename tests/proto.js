@@ -1,8 +1,6 @@
 var Aurora=require('../index.js'),
-rm=require('rm-r'),
-verb=require("verbo");
 
-var linktestdb='testdb';
+verb=require("verbo");
 
 var aurorajs=new Aurora([{"uuid":"dkhlih","dev":"1-1.5","address":0}],"Europe/Rome");
 aurorajs.data().then(function(doc){
