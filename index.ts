@@ -80,7 +80,6 @@ class AJS {
                 console.log("CMD aurora");
                 cmd = "aurora";
             }
-
         }
 
         this.exec = cmd;
