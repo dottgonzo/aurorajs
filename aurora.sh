@@ -10,7 +10,7 @@ do
 
 		a) addrs=$OPTARG;;
 		t) timezone=$OPTARG;;
-
+		e) exe=$OPTARG;;
 
 	esac
 done
@@ -72,9 +72,9 @@ hubsplit=$(echo $hub|sed 's/:/ /g'|awk {'print($1)'})
 				getdsp=' 589.707397   296.786133     0.000000     0.000000   593.467346     0.000000     0.000000     3.915176   230.570648   231.606934     0.000000    49.968021  10537.008789  6398.122070     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000     0.000000   222.698486   140.068283     0.000000     0.000000     0.000000     0.000000    OK'
 
 			elif [[ $dev && $addr ]]; then
-				getdsp=$(aurora -D -c -Y 20 -a $addr $dev)
+				getdsp=$($exe -D -c -Y 20 -a $addr $dev)
 				sleep 10
-				getpower=$(aurora -a $addr -T -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
+				getpower=$($exe -a $addr -T -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
 				sleep 10
 
 			fi
