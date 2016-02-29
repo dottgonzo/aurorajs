@@ -10,7 +10,6 @@ function prepare_address(addresses: IAddress[]) {
     }
     return JSON.stringify(readdr);
 }
-
 interface Istring {
     voltage: number;
     current: number;
@@ -27,7 +26,12 @@ interface IAPI {
     updatedAt: number;
     date: string;
     strings: Istring[];
-    grid: Istring;
+    grid: {
+        voltage: number;
+        current: number;
+        power: number;
+        hz: number;
+    };
     DcAcCvrEff: number;
     invTemp: number;
     envTemp: number;
@@ -50,7 +54,6 @@ interface IAPI {
     pin1W: number;
     pin2W: number;
 }
-
 interface IAddress {
     uuid: string;
     dev: string;
