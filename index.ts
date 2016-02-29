@@ -68,16 +68,16 @@ class AJS {
             cmd = exe;
         } else {
             if (Os.arch() == "arm" && Os.cpus()[0].model == "ARMv7 Processor rev 5 (v7l)") {
-                console.log("aurora arm")
+                console.log("CMD aurora arm")
                 cmd = __dirname + "/bin/rasp2/aurora.bin"
             } else if (Os.arch() == "x64") {
-                                console.log("aurora x64");
+                console.log("CMD aurora x64");
                 cmd = __dirname + "/bin/x64/aurora.bin"
             } else if (Os.arch() == "ia32") {
-                                                console.log("aurora ia32");
+                console.log("CMD aurora ia32");
                 cmd = __dirname + "/bin/ia32/aurora.bin"
             } else {
-                                                console.log("aurora");
+                console.log("CMD aurora");
                 cmd = "aurora";
             }
 
