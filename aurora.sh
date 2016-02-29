@@ -3,7 +3,7 @@
 export PATH=/opt/bin:/usr/local/bin:/usr/contrib/bin:/bin:/usr/bin:/sbin:/usr/sbin
 
 
-while getopts a:t: option
+while getopts a:t:e option
 do
 	case $option
 		in

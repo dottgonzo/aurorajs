@@ -2,7 +2,7 @@ var Aurora=require('../index.js');
 
 
 
-var aurorajs=new Aurora([{"uuid":"dkhlih","dev":"1-1.5","address":0}],"Europe/Rome");
+var aurorajs=new Aurora([{"uuid":"dkhlih","dev":"1-1.3","address":2}],"Europe/Rome");
 aurorajs.data().then(function(doc){
   if(doc){
     console.log(doc);
@@ -10,5 +10,5 @@ aurorajs.data().then(function(doc){
     console.log("data problems","error","Aurorajs");
   }
 }).catch(function(err){
-  verb(err,"error","raw")
+  console.log(err,"error","raw")
 });
