@@ -1,6 +1,6 @@
 let exec = require("promised-exec");
 import * as Promise from "bluebird";
-
+import * as Os from "os";
 
 function prepare_address(addresses: IAddress[]) {
     let readdr = [];
@@ -67,7 +67,17 @@ class AJS {
         if (exe) {
             cmd = exe;
         } else {
-            cmd = "aurora";
+            if (Os.arch() == "arm" && Os.cpus()[0].model == "ARMv7 Processor rev 5 (v7l)") {
+                cmd = __dirname + "/bin/rasp2/aurora.bin"
+            } else if (Os.arch() == "x64") {
+                cmd = __dirname + "/bin/x64/aurora.bin"
+            } else if (Os.arch() == "ia32") {
+                cmd = __dirname + "/bin/ia32/aurora.bin"
+            } else {
+
+                cmd = "aurora";
+            }
+
         }
 
         this.exec = cmd;
