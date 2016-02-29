@@ -96,7 +96,7 @@ class AJS {
             });
         });
     }
-    reconfigure(opt: { addresses?: IAddress[], timezone?: string, exec: string }) {
+    reconfigure(opt: { addresses?: IAddress[], timezone?: string, exec?: string }) {
         if (opt) {
             if (opt.addresses) this.addresses = opt.addresses;
             if (opt.timezone) this.timezone = opt.timezone;
