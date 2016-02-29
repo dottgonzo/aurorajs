@@ -74,5 +74,11 @@ class AJS {
             });
         });
     }
+    reconfigure(opt: { addresses?: IAddress[], timezone?: string }) {
+        if (opt) {
+            if (opt.addresses) this.addresses = opt.addresses;
+            if (opt.timezone) this.timezone = opt.timezone;
+        }
+    }
 }
 export = AJS
