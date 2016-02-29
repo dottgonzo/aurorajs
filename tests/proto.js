@@ -1,4 +1,4 @@
-var Aurora=require('../index.js'),
+var Aurora=require('../index.js');
 
 
 
