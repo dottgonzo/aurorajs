@@ -4,7 +4,7 @@ import * as Os from "os";
 
 function prepare_address(addresses: IAddress[]) {
     let readdr = [];
-    for (var i = 0; i < addresses.length; i++) {
+    for (let i = 0; i < addresses.length; i++) {
         readdr[i] = { uuid: addresses[i].uuid, dev: addresses[i].dev, address: addresses[i].address };
 
     }
@@ -55,11 +55,13 @@ interface IAPI {
     pin1W: number;
     pin2W: number;
 }
+
 interface IAddress {
     uuid: string;
     dev: string;
     address: number;
 }
+
 class AJS {
     addresses: IAddress[];
     timezone: string;
