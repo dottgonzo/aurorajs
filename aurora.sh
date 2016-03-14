@@ -74,7 +74,7 @@ hubsplit=$(echo $hub|sed 's/:/ /g'|awk {'print($1)'})
 			elif [[ $dev && $addr ]]; then
 				getdsp=$($exe -D -c -Y 20 -a $addr $dev)
 				sleep 10
-				getpower=$($exe -a $addr -T -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
+				getpower=$($exe -a $addr -t -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
 				sleep 10
 
 			fi
