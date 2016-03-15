@@ -76,21 +76,24 @@ hubsplit=$(echo $hub|sed 's/:/ /g'|awk {'print($1)'})
                 if [[ $? != 0 ]]; then
                 				sleep 5
                 	getdsp=$($exe -D -c -Y 20 -a $addr $dev)
-                fi
-                                if [[ $? != 0 ]]; then
+                    
+                                                    if [[ $? != 0 ]]; then
                 				sleep 5
                 	getdsp=$($exe -D -c -Y 20 -a $addr $dev)
                 fi
+                fi
+
 				sleep 5
                 getpower=$($exe -a $addr -t -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
                                if [[ $? != 0 ]]; then
                                				sleep 5
 				getpower=$($exe -a $addr -t -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
-                fi
-                               if [[ $? != 0 ]]; then
+                                               if [[ $? != 0 ]]; then
                                				sleep 5
 				getpower=$($exe -a $addr -t -c -d 0 -e -Y 20 $dev) #dopo 20 secondi!!
                 fi
+                fi
+
 				sleep 5
 
 			fi
