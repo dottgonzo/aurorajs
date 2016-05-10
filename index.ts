@@ -103,6 +103,23 @@ class AJS {
             });
         });
     }
+
+    check(uid: string) { // get model, firmware, production date
+
+        let exe = this.exec;
+
+
+        return new Promise(function(resolve, reject) {
+            exec("").then(function(data: string) {
+                resolve(JSON.parse(data));
+            }).catch(function(err) {
+                reject(err);
+            });
+        });
+
+    }
+
+
     reconfigure(opt: { addresses?: IAddress[], timezone?: string, exec?: string }) {
         if (opt) {
             if (opt.addresses) this.addresses = opt.addresses;
