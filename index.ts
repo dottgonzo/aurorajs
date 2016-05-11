@@ -277,6 +277,7 @@ class AJS {
                 }
 
 
+
                 let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g " + checkanswer.dev;
 
                 checking(checkanswer, cmd).then(function(a) {
