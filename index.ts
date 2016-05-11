@@ -298,10 +298,6 @@ class AJS {
                 });
 
 
-
-
-
-
             }).catch(function(err) {
                 console.error("errrrrr2");
 
