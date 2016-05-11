@@ -1,22 +1,23 @@
 {
   "ambientDependencies": {
-    "chai": "github:DefinitelyTyped/DefinitelyTyped/chai/chai.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "gulp-concat": "github:DefinitelyTyped/DefinitelyTyped/gulp-concat/gulp-concat.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "Q": "github:DefinitelyTyped/DefinitelyTyped/q/Q.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "assertion-error": "github:DefinitelyTyped/DefinitelyTyped/assertion-error/assertion-error.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "async": "registry:dt/async#1.4.2+20160501155344",
     "bluebird": "github:DefinitelyTyped/DefinitelyTyped/bluebird/bluebird.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "chai": "github:DefinitelyTyped/DefinitelyTyped/chai/chai.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "chalk": "github:DefinitelyTyped/DefinitelyTyped/chalk/chalk.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "gulp": "github:DefinitelyTyped/DefinitelyTyped/gulp/gulp.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "gulp-concat": "github:DefinitelyTyped/DefinitelyTyped/gulp-concat/gulp-concat.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "gulp-filter": "github:DefinitelyTyped/DefinitelyTyped/gulp-filter/gulp-filter.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "vinyl": "github:DefinitelyTyped/DefinitelyTyped/vinyl/vinyl.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "minimatch": "github:DefinitelyTyped/DefinitelyTyped/minimatch/minimatch.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "gulp-mocha": "github:DefinitelyTyped/DefinitelyTyped/gulp-mocha/gulp-mocha.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "gulp-sourcemaps": "github:DefinitelyTyped/DefinitelyTyped/gulp-sourcemaps/gulp-sourcemaps.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "gulp-typescript": "github:DefinitelyTyped/DefinitelyTyped/gulp-typescript/gulp-typescript.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "gulp-util": "github:DefinitelyTyped/DefinitelyTyped/gulp-util/gulp-util.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "through2": "github:DefinitelyTyped/DefinitelyTyped/through2/through2.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "chalk": "github:DefinitelyTyped/DefinitelyTyped/chalk/chalk.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "minimatch": "github:DefinitelyTyped/DefinitelyTyped/minimatch/minimatch.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "gulp": "github:DefinitelyTyped/DefinitelyTyped/gulp/gulp.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
     "orchestrator": "github:DefinitelyTyped/DefinitelyTyped/orchestrator/orchestrator.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
-    "Q": "github:DefinitelyTyped/DefinitelyTyped/q/Q.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+    "through2": "github:DefinitelyTyped/DefinitelyTyped/through2/through2.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e",
+    "vinyl": "github:DefinitelyTyped/DefinitelyTyped/vinyl/vinyl.d.ts#70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
   }
 }
