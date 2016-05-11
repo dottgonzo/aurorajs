@@ -4,6 +4,7 @@ import * as Os from "os";
 import lsusbdev = require("lsusbdev");
 import async = require("async");
 
+let apiVersion: string = require(__dirname + "/package.json").apiVersion;
 
 
 function checking(checkanswer, cmd) {
@@ -112,7 +113,8 @@ interface IAPI {
     dateprod: string;
     serial: string;
     address: number;
-
+    model: string;
+    apiVersion: string;
 }
 
 
@@ -125,15 +127,17 @@ interface IAddress {
     firmware?: string;
     dateprod?: string;
     serial?: string;
-
-
+    model?: string;
+    apiVersion?: string;
 }
 
 class AJS {
     addresses: IAddress[];
     timezone: string;
     exec: string;
+    apiVersion: string;
     constructor(addresses: IAddress[], timezone: string, exe?: string) {
+        this.apiVersion = apiVersion;
         this.addresses = addresses;
         this.timezone = timezone;
         let cmd: string;
@@ -181,7 +185,8 @@ class AJS {
                                     apians[i].dateprod = a[f].dateprod;
                                     apians[i].serial = a[f].serial;
                                     apians[i].address = a[f].address;
-
+                                    apians[i].model = "Aurora";
+                                    apians[i].apiVersion = apiVersion;
 
                                 }
                             }
@@ -198,7 +203,14 @@ class AJS {
                 }).catch(function() {
 
                     exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
-                        resolve(JSON.parse(data));
+
+                        let apians: IAPI[] = JSON.parse(data);
+                        for (let i = 0; i < apians.length; i++) {
+                            apians[i].model = "Aurora";
+                            apians[i].apiVersion = apiVersion;
+                        }
+
+                        resolve(apians);
                     }).catch(function(err) {
                         reject(err);
                     });
@@ -225,7 +237,8 @@ class AJS {
                                 apians[i].serial = a[f].serial;
                                 apians[i].address = a[f].address;
 
-
+                                apians[i].model = "Aurora";
+                                apians[i].apiVersion = apiVersion;
                             }
                         }
 
