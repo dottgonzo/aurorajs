@@ -203,7 +203,7 @@ class AJS {
             }
 
 
-            if (checkmodel) {
+            if (checkmodel.length > 0) {
 
                 console.log("checking versions");
 
