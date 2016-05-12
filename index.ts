@@ -187,10 +187,10 @@ class AJS {
 
                                 if (apians[i].uid === a[f].uuid) {
 
-                                    if (apians[i].firmware) apians[i].firmware = a[f].firmware;
-                                    if (apians[i].dateprod) apians[i].dateprod = a[f].dateprod;
-                                    if (apians[i].serial) apians[i].serial = a[f].serial;
-                                    if (apians[i].address) apians[i].address = a[f].address;
+                                    if (a[f].firmware) apians[i].firmware = a[f].firmware;
+                                    if (a[f].dateprod) apians[i].dateprod = a[f].dateprod;
+                                    if (a[f].serial) apians[i].serial = a[f].serial;
+                                    if (a[f].address) apians[i].address = a[f].address;
 
                                     apians[i].model = "Aurora";
                                     apians[i].apiVersion = apiVersion;
@@ -238,10 +238,10 @@ class AJS {
 
                             if (apians[i].uid === addressesoptions[f].uuid) {
 
-                                if (apians[i].firmware) apians[i].firmware = addressesoptions[f].firmware;
-                                if (apians[i].dateprod) apians[i].dateprod = addressesoptions[f].dateprod;
-                                if (apians[i].serial) apians[i].serial = addressesoptions[f].serial;
-                                if (apians[i].address) apians[i].address = addressesoptions[f].address;
+                                if (addressesoptions[f].firmware) apians[i].firmware = addressesoptions[f].firmware;
+                                if (addressesoptions[f].dateprod) apians[i].dateprod = addressesoptions[f].dateprod;
+                                if (addressesoptions[f].serial) apians[i].serial = addressesoptions[f].serial;
+                                if (addressesoptions[f].address) apians[i].address = addressesoptions[f].address;
 
                                 apians[i].model = "Aurora";
                                 apians[i].apiVersion = apiVersion;
