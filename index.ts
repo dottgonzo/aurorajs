@@ -163,13 +163,15 @@ class AJS {
         let exe = this.exec;
         let timezone = this.timezone;
 
-        let prepared_addresses = prepare_address(this.addresses);
+        let addressesoptions = this.addresses;
+
+        let prepared_addresses = prepare_address(addressesoptions);
 
         let that = this;
 
         return new Promise<IAPI[]>(function(resolve, reject) {
 
-            if (!that.addresses[0].serial) {
+            if (!addressesoptions[0].serial) {
 
                 console.log("checking versions");
 
@@ -201,12 +203,14 @@ class AJS {
                         resolve(apians);
 
                     }).catch(function(err) {
+                        console.log(err);
+
                         reject(err);
                     });
 
 
-                }).catch(function() {
-
+                }).catch(function(err) {
+                    console.log(err);
                     exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
 
                         let apians: IAPI[] = JSON.parse(data);
@@ -217,6 +221,7 @@ class AJS {
 
                         resolve(apians);
                     }).catch(function(err) {
+                        console.log(err);
                         reject(err);
                     });
 
@@ -225,22 +230,18 @@ class AJS {
 
             } else {
 
-                let a = that.addresses;
-
-
-
                 exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
 
                     let apians: IAPI[] = JSON.parse(data);
                     for (let i = 0; i < apians.length; i++) {
-                        for (let f = 0; f < a.length; f++) {
+                        for (let f = 0; f < addressesoptions.length; f++) {
 
-                            if (apians[i].uid === a[f].uuid) {
+                            if (apians[i].uid === addressesoptions[f].uuid) {
 
-                                if (apians[i].firmware) apians[i].firmware = a[f].firmware;
-                                if (apians[i].dateprod) apians[i].dateprod = a[f].dateprod;
-                                if (apians[i].serial) apians[i].serial = a[f].serial;
-                                if (apians[i].address) apians[i].address = a[f].address;
+                                if (apians[i].firmware) apians[i].firmware = addressesoptions[f].firmware;
+                                if (apians[i].dateprod) apians[i].dateprod = addressesoptions[f].dateprod;
+                                if (apians[i].serial) apians[i].serial = addressesoptions[f].serial;
+                                if (apians[i].address) apians[i].address = addressesoptions[f].address;
 
                                 apians[i].model = "Aurora";
                                 apians[i].apiVersion = apiVersion;
