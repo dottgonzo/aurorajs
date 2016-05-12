@@ -15,32 +15,47 @@ function checking(checkanswer, cmd) {
             let lines = data.split("\n");
             for (let i = 0; i < lines.length; i++) {
 
-                if (lines[i].split("erial Number:").length > 1 && lines[i].split("erial Number: ")[1].length > 1) {
 
-                    checkanswer.serial = lines[i].split("erial Number: ")[1];
 
-                } else {
-                    checkanswer.serial = "none";
+                if (lines[i].split("erial Number:").length > 1) {
+                    if (lines[i].split("erial Number: ")[1].length > 1) {
+
+                        checkanswer.serial = lines[i].split("erial Number: ")[1];
+
+                    } else {
+                        checkanswer.serial = "none";
+                    }
                 }
 
-                if (lines[i].split("irmware:").length > 1 && lines[i].split("irmware: ")[1].length > 1) {
+                if (lines[i].split("irmware:").length > 1) {
+                    if (lines[i].split("irmware: ")[1].length > 1) {
 
-                    checkanswer.firmware = lines[i].split("irmware: ")[1];
+                        checkanswer.firmware = lines[i].split("irmware: ")[1];
 
-                } else {
-                    checkanswer.firmware = "none";
+                    } else {
+                        checkanswer.firmware = "none";
+                    }
                 }
-
-                if (lines[i].split("anufacturing Date:").length > 1 && lines[i].split("anufacturing Date: ")[1].length > 1) {
-                    checkanswer.dateprod = lines[i].split("anufacturing Date: ")[1];
-                } else {
-                    checkanswer.dateprod = "none";
+                if (lines[i].split("anufacturing Date:").length > 1) {
+                    if (lines[i].split("anufacturing Date: ")[1].length > 1) {
+                        checkanswer.dateprod = lines[i].split("anufacturing Date: ")[1];
+                    } else {
+                        checkanswer.dateprod = "none";
+                    }
                 }
 
             }
 
 
-            resolve(checkanswer);
+
+            if (checkanswer.serial && checkanswer.firmware && checkanswer.dateprod) {
+                resolve(checkanswer);
+
+            } else {
+                reject("malformed answer");
+            }
+
+
 
 
 
