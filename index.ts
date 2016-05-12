@@ -15,28 +15,34 @@ function checking(checkanswer, cmd) {
             let lines = data.split("\n");
             for (let i = 0; i < lines.length; i++) {
 
-                if (lines[i].split("erial Number:").length > 1) {
+                if (lines[i].split("erial Number:").length > 1 && lines[i].split("erial Number: ")[1].length > 1) {
+
                     checkanswer.serial = lines[i].split("erial Number: ")[1];
+
+                } else {
+                    checkanswer.serial = "none";
                 }
 
-                if (lines[i].split("irmware:").length > 1) {
+                if (lines[i].split("irmware:").length > 1 && lines[i].split("irmware: ")[1].length > 1) {
+
                     checkanswer.firmware = lines[i].split("irmware: ")[1];
+
+                } else {
+                    checkanswer.firmware = "none";
                 }
 
-                if (lines[i].split("anufacturing Date:").length > 1) {
+                if (lines[i].split("anufacturing Date:").length > 1 && lines[i].split("anufacturing Date: ")[1].length > 1) {
                     checkanswer.dateprod = lines[i].split("anufacturing Date: ")[1];
+                } else {
+                    checkanswer.dateprod = "none";
                 }
 
-
-
             }
 
-            if (checkanswer.serial && checkanswer.serial !== "" && checkanswer.firmware && checkanswer.firmware !== "" && checkanswer.dateprod && checkanswer.dateprod !== "") {
-                resolve(checkanswer);
 
-            } else {
-                reject("malformed answer");
-            }
+            resolve(checkanswer);
+
+
 
             //   checkanswer.firmware = data;
 
@@ -171,7 +177,19 @@ class AJS {
 
         return new Promise<IAPI[]>(function(resolve, reject) {
 
-            if (!addressesoptions[0].serial) {
+            let checkmodel = false;
+
+            for (let i = 0; i < addressesoptions.length; i++) {
+
+                if (!checkmodel) {
+                    if (addressesoptions[i].serial === "none" || addressesoptions[i].firmware === "none" || addressesoptions[i].dateprod === "none") {
+                        checkmodel = true;
+                    }
+                }
+            }
+
+
+            if (checkmodel) {
 
                 console.log("checking versions");
 
@@ -314,9 +332,9 @@ class AJS {
 
                                 console.log(err);
 
-                                checkanswer.serial = "";
-                                checkanswer.firmware = "";
-                                checkanswer.dateprod = "";
+                                checkanswer.serial = "none";
+                                checkanswer.firmware = "none";
+                                checkanswer.dateprod = "none";
 
                                 resolve(checkanswer);
 
