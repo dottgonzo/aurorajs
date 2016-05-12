@@ -310,7 +310,15 @@ class AJS {
                             checking(checkanswer, cmd).then(function(a) {
                                 resolve(a);
                             }).catch(function(err) {
-                                reject(err);
+
+                                console.log(err);
+
+                                checkanswer.serial = "";
+                                checkanswer.firmware = "";
+                                checkanswer.dateprod = "";
+
+                                resolve(checkanswer);
+
                             });
                         });
                     });
