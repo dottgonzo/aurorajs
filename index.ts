@@ -157,7 +157,9 @@ class AJS {
 
         this.exec = cmd;
     }
+
     data() {
+
         let exe = this.exec;
         let timezone = this.timezone;
 
@@ -168,6 +170,8 @@ class AJS {
         return new Promise<IAPI[]>(function(resolve, reject) {
 
             if (!that.addresses[0].serial) {
+
+                console.log("checking versions");
 
                 that.checkAll().then(function(a) {
 
@@ -181,10 +185,11 @@ class AJS {
 
                                 if (apians[i].uid === a[f].uuid) {
 
-                                    apians[i].firmware = a[f].firmware;
-                                    apians[i].dateprod = a[f].dateprod;
-                                    apians[i].serial = a[f].serial;
-                                    apians[i].address = a[f].address;
+                                    if (apians[i].firmware) apians[i].firmware = a[f].firmware;
+                                    if (apians[i].dateprod) apians[i].dateprod = a[f].dateprod;
+                                    if (apians[i].serial) apians[i].serial = a[f].serial;
+                                    if (apians[i].address) apians[i].address = a[f].address;
+
                                     apians[i].model = "Aurora";
                                     apians[i].apiVersion = apiVersion;
 
@@ -232,10 +237,10 @@ class AJS {
 
                             if (apians[i].uid === a[f].uuid) {
 
-                                apians[i].firmware = a[f].firmware;
-                                apians[i].dateprod = a[f].dateprod;
-                                apians[i].serial = a[f].serial;
-                                apians[i].address = a[f].address;
+                                if (apians[i].firmware) apians[i].firmware = a[f].firmware;
+                                if (apians[i].dateprod) apians[i].dateprod = a[f].dateprod;
+                                if (apians[i].serial) apians[i].serial = a[f].serial;
+                                if (apians[i].address) apians[i].address = a[f].address;
 
                                 apians[i].model = "Aurora";
                                 apians[i].apiVersion = apiVersion;
