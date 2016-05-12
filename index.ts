@@ -177,14 +177,13 @@ class AJS {
 
         return new Promise<IAPI[]>(function(resolve, reject) {
 
-            let checkmodel = false;
+            let checkmodel = [];
 
             for (let i = 0; i < addressesoptions.length; i++) {
 
-                if (!checkmodel) {
-                    if (addressesoptions[i].serial === "none" || addressesoptions[i].firmware === "none" || addressesoptions[i].dateprod === "none") {
-                        checkmodel = true;
-                    }
+                if (!addressesoptions[i].serial || addressesoptions[i].serial === "none" || !addressesoptions[i].firmware || addressesoptions[i].firmware === "none" || !addressesoptions[i].dateprod || addressesoptions[i].dateprod === "none") {
+                    checkmodel.push(addressesoptions[i].uuid);
+
                 }
             }
 
@@ -193,7 +192,7 @@ class AJS {
 
                 console.log("checking versions");
 
-                that.checkAll().then(function(a) {
+                that.checkAll(checkmodel).then(function(a) {
 
                     that.addresses = a;
 
@@ -357,9 +356,27 @@ class AJS {
     }
 
 
-    checkAll() {
+    checkAll(adds?: string[]) {
 
-        let addresses = this.addresses;
+        let addresses: IAddress[] = [];
+        let thisaddresses = this.addresses;
+        if (adds) {
+            for (let i = 0; i < thisaddresses.length; i++) {
+                for (let a = 0; a < adds.length; a++) {
+
+                    if (thisaddresses[i].uuid === adds[a]) {
+                        addresses.push(thisaddresses[i]);
+                    }
+
+                }
+            }
+        } else {
+            addresses = thisaddresses;
+        }
+
+
+
+
 
         let that = this;
 
