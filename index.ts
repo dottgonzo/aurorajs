@@ -393,8 +393,6 @@ class AJS {
 
 
 
-
-
         let that = this;
 
         let allanswers: IAddress[] = [];
