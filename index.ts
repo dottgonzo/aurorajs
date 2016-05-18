@@ -7,7 +7,10 @@ import async = require("async");
 let apiVersion: string = require(__dirname + "/package.json").apiVersion;
 
 
-function checking(checkanswer, cmd) {
+function checking(checkanswer, exe) {
+
+    let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g " + checkanswer.dev;
+
     return new Promise<IAddress>(function(resolve, reject) {
 
 
@@ -329,18 +332,17 @@ class AJS {
 
 
 
-                let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g " + checkanswer.dev;
 
-                checking(checkanswer, cmd).then(function(a) {
+                checking(checkanswer, exe).then(function(a) {
                     resolve(a);
                 }).catch(function() {
-                    checking(checkanswer, cmd).then(function(a) {
+                    checking(checkanswer, exe).then(function(a) {
                         resolve(a);
                     }).catch(function() {
-                        checking(checkanswer, cmd).then(function(a) {
+                        checking(checkanswer, exe).then(function(a) {
                             resolve(a);
                         }).catch(function() {
-                            checking(checkanswer, cmd).then(function(a) {
+                            checking(checkanswer, exe).then(function(a) {
                                 resolve(a);
                             }).catch(function(err) {
 
@@ -408,7 +410,20 @@ class AJS {
 
                     callback();
 
-                }).catch(function() {
+                }).catch(function(err) {
+
+                    console.log("err", err);
+
+                    for (let i = 0; i < thisaddresses.length; i++) {
+
+                        if (thisaddresses[i].uuid === iterator.uuid) {
+                            allanswers.push(thisaddresses[i]);
+                        }
+
+
+                    }
+
+
                     callback();
 
                 });
