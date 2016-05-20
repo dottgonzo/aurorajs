@@ -212,7 +212,23 @@ class AJS {
 
                 that.checkAll(checkmodel).then(function(a) {
 
-                    that.addresses = a;
+
+                    for (let i = 0; i < a.length; i++) {
+
+                        if (a[i].serial && a[i].serial !== "none" && a[i].firmware && a[i].firmware !== "none" && a[i].dateprod && a[i].dateprod !== "none") {
+
+                            for (let add = 0; add < that.addresses.length; add++) {
+
+                                if (that.addresses[add].uuid === a[i].uuid) {
+                                    that.addresses[add] = a[i];
+                                }
+
+                            }
+                        }
+                    }
+
+
+
 
                     exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
 
