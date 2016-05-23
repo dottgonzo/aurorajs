@@ -9,7 +9,7 @@ let apiVersion: string = require(__dirname + "/package.json").apiVersion;
 
 function checking(checkanswer, exe) {
 
-    let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g " + checkanswer.dev;
+    let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g -p" + checkanswer.dev;
 
     return new Promise<IAddress>(function(resolve, reject) {
 
@@ -25,10 +25,24 @@ function checking(checkanswer, exe) {
 
                         checkanswer.serial = lines[i].split("erial Number: ")[1];
 
+                        if (lines[i].split("art Number:").length > 1) {
+                            if (lines[i].split("art Number: ")[1].length > 1) {
+
+                                checkanswer.serial += "/" + lines[i].split("art Number: ")[1];
+
+                            } else {
+                                checkanswer.serial = "none";
+                            }
+                        }
+
                     } else {
                         checkanswer.serial = "none";
                     }
                 }
+
+
+
+
 
                 if (lines[i].split("irmware:").length > 1) {
                     if (lines[i].split("irmware: ")[1].length > 1) {

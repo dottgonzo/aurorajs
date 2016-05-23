@@ -1,6 +1,6 @@
 {
   "name": "aurorajs",
-  "version": "0.1.54",
+  "version": "0.1.55",
   "apiVersion": "0.0.3",
   "main": "index.js",
   "scripts": {
