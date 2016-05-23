@@ -9,7 +9,7 @@ let apiVersion: string = require(__dirname + "/package.json").apiVersion;
 
 function checking(checkanswer, exe) {
 
-    let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g -p" + checkanswer.dev;
+    let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g -p " + checkanswer.dev;
 
     return new Promise<IAddress>(function(resolve, reject) {
 
