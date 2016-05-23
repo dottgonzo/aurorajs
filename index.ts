@@ -25,22 +25,21 @@ function checking(checkanswer, exe) {
 
                         checkanswer.serial = lines[i].split("erial Number: ")[1];
 
-                        if (lines[i].split("art Number:").length > 1) {
-                            if (lines[i].split("art Number: ")[1].length > 1) {
-
-                                checkanswer.serial += "/" + lines[i].split("art Number: ")[1];
-
-                            } else {
-                                checkanswer.serial = "none";
-                            }
-                        }
-
                     } else {
                         checkanswer.serial = "none";
                     }
                 }
 
 
+                if (lines[i].split("art Number:").length > 1) {
+                    if (lines[i].split("art Number: ")[1].length > 1) {
+
+                        checkanswer.pn = lines[i].split("art Number: ")[1];
+
+                    } else {
+                        checkanswer.pn = "none";
+                    }
+                }
 
 
 
@@ -150,6 +149,7 @@ interface IAPI {
     firmware: string;
     dateprod: string;
     serial: string;
+    pn: string;
     address: number;
     model: string;
     apiVersion: string;
@@ -164,6 +164,7 @@ interface IAddress {
     hub?: string;
     firmware?: string;
     dateprod?: string;
+    pn?: string;
     serial?: string;
     model?: string;
     apiVersion?: string;
@@ -213,7 +214,7 @@ class AJS {
 
             for (let i = 0; i < addressesoptions.length; i++) {
 
-                if (!addressesoptions[i].serial || addressesoptions[i].serial === "none" || !addressesoptions[i].firmware || addressesoptions[i].firmware === "none" || !addressesoptions[i].dateprod || addressesoptions[i].dateprod === "none") {
+                if (!addressesoptions[i].serial || addressesoptions[i].serial === "none" || !addressesoptions[i].pn || addressesoptions[i].pn === "none" || !addressesoptions[i].firmware || addressesoptions[i].firmware === "none" || !addressesoptions[i].dateprod || addressesoptions[i].dateprod === "none") {
                     checkmodel.push(addressesoptions[i].uuid);
 
                 }
@@ -229,7 +230,7 @@ class AJS {
 
                     for (let i = 0; i < a.length; i++) {
 
-                        if (a[i].serial && a[i].serial !== "none" && a[i].firmware && a[i].firmware !== "none" && a[i].dateprod && a[i].dateprod !== "none") {
+                        if (a[i].serial && a[i].serial !== "none" && a[i].pn && a[i].pn !== "none" && a[i].firmware && a[i].firmware !== "none" && a[i].dateprod && a[i].dateprod !== "none") {
 
                             for (let add = 0; add < that.addresses.length; add++) {
 
@@ -256,6 +257,8 @@ class AJS {
                                     if (a[f].dateprod) apians[i].dateprod = a[f].dateprod;
                                     if (a[f].serial) apians[i].serial = a[f].serial;
                                     if (a[f].address) apians[i].address = a[f].address;
+                                    if (a[f].pn) apians[i].pn = a[f].pn;
+
 
                                     apians[i].model = "Aurora";
                                     apians[i].apiVersion = apiVersion;
@@ -307,6 +310,7 @@ class AJS {
                                 if (addressesoptions[f].dateprod) apians[i].dateprod = addressesoptions[f].dateprod;
                                 if (addressesoptions[f].serial) apians[i].serial = addressesoptions[f].serial;
                                 if (addressesoptions[f].address) apians[i].address = addressesoptions[f].address;
+                                if (addressesoptions[f].pn) apians[i].pn = addressesoptions[f].pn;
 
                                 apians[i].model = "Aurora";
                                 apians[i].apiVersion = apiVersion;
@@ -381,6 +385,7 @@ class AJS {
                                 checkanswer.serial = "none";
                                 checkanswer.firmware = "none";
                                 checkanswer.dateprod = "none";
+                                checkanswer.pn = "none";
 
                                 resolve(checkanswer);
 
