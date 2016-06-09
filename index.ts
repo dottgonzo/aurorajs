@@ -209,7 +209,7 @@ class AJS {
     exec: string;
     apiVersion: string;
     constructor(addresses: IAddress[], timezone: string, exe?: string) {
-        this.apiVersion = require(__dirname + "/package.json").apiVersion;
+        this.apiVersion = require(__dirname + "/package.json").version;
         this.addresses = addresses;
         this.timezone = timezone;
         let cmd: string;
