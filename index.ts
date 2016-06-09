@@ -4,7 +4,30 @@ import * as Os from "os";
 import lsusbdev = require("lsusbdev");
 import async = require("async");
 
-let apiVersion: string = require(__dirname + "/package.json").apiVersion;
+
+
+function getAlarms(cmd: string, address: number, dev: string) {
+    return new Promise<Ialarm[]>(function(resolve, reject) {
+
+        exec(cmd + " -a" + address + " -A -Y20 " + dev + " | cut -d: -f2- | sed 's/               //g'").then(function(data: string) {
+
+            let lines = data.split("\n");
+            let alarms = <Ialarm[]>[];
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i] !== "No Alarm" && lines[i].length > 3) {
+                    alarms.push({ alarm: lines[i] });
+                }
+            }
+
+            return alarms;
+
+        }).catch(function(err) {
+            console.log(err);
+            reject(err);
+        });
+    });
+
+}
 
 
 function checking(checkanswer, exe) {
@@ -17,8 +40,6 @@ function checking(checkanswer, exe) {
         exec(cmd).then(function(data) { // firmware
             let lines = data.split("\n");
             for (let i = 0; i < lines.length; i++) {
-
-
 
                 if (lines[i].split("erial Number:").length > 1) {
                     if (lines[i].split("erial Number: ")[1].length > 1) {
@@ -71,10 +92,6 @@ function checking(checkanswer, exe) {
                 reject("malformed answer");
             }
 
-
-
-
-
             //   checkanswer.firmware = data;
 
         }).catch(function(err) {
@@ -106,7 +123,23 @@ interface Istring {
     power: number;
 }
 
+interface Ialarm {
+    alarm: string;
+}
 
+interface IAlarm {
+
+    alarms: Ialarm[];
+    firmware: string;
+    dateprod: string;
+    serial: string;
+    pn: string;
+    address: number;
+    model: string;
+    apiVersion: string;
+    createdAt: number;
+
+}
 
 interface IAPI {
 
@@ -176,7 +209,7 @@ class AJS {
     exec: string;
     apiVersion: string;
     constructor(addresses: IAddress[], timezone: string, exe?: string) {
-        this.apiVersion = apiVersion;
+        this.apiVersion = require(__dirname + "/package.json").apiVersion;
         this.addresses = addresses;
         this.timezone = timezone;
         let cmd: string;
@@ -196,6 +229,142 @@ class AJS {
 
         this.exec = cmd;
     }
+
+    alarm(uuid: string) {
+        let exe = this.exec;
+        let timezone = this.timezone;
+        let checkanswer = <IAddress>{ uuid: uuid };
+        let addresses = this.addresses;
+        let apiVersion = this.apiVersion;
+
+
+        let ala = <IAlarm>{
+            model: "Aurora",
+            apiVersion: apiVersion,
+            createdAt: new Date().getTime()
+        };
+
+
+        for (let i = 0; i < addresses.length; i++) {
+            if (addresses[i].uuid === uuid) {
+                checkanswer.hub = addresses[i].hub;
+                checkanswer.address = addresses[i].address;
+                if (addresses[i].dev) checkanswer.dev = addresses[i].dev;
+
+                if (addresses[i].firmware) ala.firmware = addresses[i].firmware;
+                if (addresses[i].dateprod) ala.dateprod = addresses[i].dateprod;
+                if (addresses[i].serial) ala.serial = addresses[i].serial;
+                if (addresses[i].address) ala.address = addresses[i].address;
+                if (addresses[i].pn) ala.pn = addresses[i].pn;
+
+            }
+        }
+        return new Promise<IAlarm>(function(resolve, reject) {
+            if (!checkanswer.dev) {
+
+
+                lsusbdev().then(function(devis) {
+
+
+                    for (let i = 0; i < devis.length; i++) {
+                        if (devis[i].hub === checkanswer.hub) {
+                            checkanswer.dev = devis[i].dev;
+                        }
+                    }
+
+
+                    getAlarms(exe, checkanswer.address, checkanswer.dev).then(function(alarms) {
+                        if (alarms.length > 0) {
+                            resolve();
+                        } else {
+
+                        }
+                    }).catch(function(err) {
+                        console.error("errrrrr2");
+                        reject(err);
+                    });
+
+
+                }).catch(function(err) {
+                    console.error("errrrrr2");
+
+                    reject(err);
+
+                });
+            } else {
+
+            }
+        });
+    }
+
+    alarms(adds?: string[]) {
+
+        let addresses: IAddress[] = [];
+        let thisaddresses = this.addresses;
+        if (adds) {
+            for (let i = 0; i < thisaddresses.length; i++) {
+                for (let a = 0; a < adds.length; a++) {
+
+                    if (thisaddresses[i].uuid === adds[a]) {
+                        addresses.push(thisaddresses[i]);
+                    }
+
+                }
+            }
+        } else {
+            addresses = thisaddresses;
+        }
+
+
+
+
+        let that = this;
+
+        let allanswers: IAlarm[] = [];
+
+        return new Promise<IAlarm[]>(function(resolve, reject) {
+
+
+            async.each(addresses, function(iterator, callback) {
+
+                that.alarm(iterator.uuid).then(function(ala) {
+
+                    allanswers.push(ala);
+
+                    callback();
+
+                }).catch(function(err) {
+
+                    console.log("err", err);
+
+                    callback();
+
+                });
+
+            }, function(err) {
+                if (err) {
+                    // One of the iterations produced an error.
+                    // All processing will now stop.
+                    reject(err);
+                } else {
+
+                    resolve(allanswers);
+
+                }
+
+            });
+
+
+
+
+        });
+
+
+
+
+
+    }
+
 
     data() {
 
@@ -242,9 +411,6 @@ class AJS {
                         }
                     }
 
-
-
-
                     exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
 
                         let apians: IAPI[] = JSON.parse(data);
@@ -261,7 +427,7 @@ class AJS {
 
 
                                     apians[i].model = "Aurora";
-                                    apians[i].apiVersion = apiVersion;
+                                    apians[i].apiVersion = that.apiVersion;
 
                                 }
                             }
@@ -284,7 +450,7 @@ class AJS {
                         let apians: IAPI[] = JSON.parse(data);
                         for (let i = 0; i < apians.length; i++) {
                             apians[i].model = "Aurora";
-                            apians[i].apiVersion = apiVersion;
+                            apians[i].apiVersion = that.apiVersion;
                         }
 
                         resolve(apians);
@@ -313,7 +479,7 @@ class AJS {
                                 if (addressesoptions[f].pn) apians[i].pn = addressesoptions[f].pn;
 
                                 apians[i].model = "Aurora";
-                                apians[i].apiVersion = apiVersion;
+                                apians[i].apiVersion = that.apiVersion;
                             }
                         }
 
@@ -363,9 +529,6 @@ class AJS {
                         checkanswer.dev = devis[i].dev;
                     }
                 }
-
-
-
 
                 checking(checkanswer, exe).then(function(a) {
                     resolve(a);
@@ -452,11 +615,7 @@ class AJS {
                         if (thisaddresses[i].uuid === iterator.uuid) {
                             allanswers.push(thisaddresses[i]);
                         }
-
-
                     }
-
-
                     callback();
 
                 });
