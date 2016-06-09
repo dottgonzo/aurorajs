@@ -274,11 +274,9 @@ class AJS {
 
 
                     getAlarms(exe, checkanswer.address, checkanswer.dev).then(function(alarms) {
-                        if (alarms.length > 0) {
-                            resolve();
-                        } else {
 
-                        }
+                        ala.alarms = alarms;
+                        resolve(ala);
                     }).catch(function(err) {
                         console.error("errrrrr2");
                         reject(err);
