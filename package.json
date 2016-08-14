@@ -1,6 +1,6 @@
 {
   "name": "aurorajs",
-  "version": "0.1.60",
+  "version": "0.2.0",
   "main": "index.js",
   "scripts": {
     "test": "node ./tests/main.js"
@@ -14,7 +14,7 @@
   "dependencies": {
     "async": "^2.0.0-rc.4",
     "bluebird": "^3.1.1",
-    "lsusbdev": "0.0.10",
+    "lsusbdev": "^1.0.0",
     "promised-exec": "^1.0.1",
     "verbo": "0.0.9"
   },

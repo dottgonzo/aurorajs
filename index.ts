@@ -1,15 +1,18 @@
-let exec = require("promised-exec");
-import * as Promise from "bluebird";
 import * as Os from "os";
-import lsusbdev = require("lsusbdev");
-import async = require("async");
+
+import * as Promise from "bluebird";
+import * as async from "async";
+
+import lsusbdev from "lsusbdev";
+
+const exec: (string) => Promise<string> = require("promised-exec");
 
 
 
 function getAlarms(cmd: string, address: number, dev: string) {
-    return new Promise<Ialarm[]>(function(resolve, reject) {
+    return new Promise<Ialarm[]>(function (resolve, reject) {
 
-        exec(cmd + " -a" + address + " -A -Y20 " + dev + " | cut -d: -f2- | sed 's/               //g'").then(function(data: string) {
+        exec(cmd + " -a" + address + " -A -Y20 " + dev + " | cut -d: -f2- | sed 's/               //g'").then(function (data: string) {
 
             let lines = data.split("\n");
             let alarms = <Ialarm[]>[];
@@ -21,7 +24,7 @@ function getAlarms(cmd: string, address: number, dev: string) {
 
             return alarms;
 
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log(err);
             reject(err);
         });
@@ -34,10 +37,10 @@ function checking(checkanswer, exe) {
 
     let cmd = exe + " -a " + checkanswer.address + " -Y 20 -n -f -g -p " + checkanswer.dev;
 
-    return new Promise<IAddress>(function(resolve, reject) {
+    return new Promise<IAddress>(function (resolve, reject) {
 
 
-        exec(cmd).then(function(data) { // firmware
+        exec(cmd).then(function (data) { // firmware
             let lines = data.split("\n");
             for (let i = 0; i < lines.length; i++) {
 
@@ -94,7 +97,7 @@ function checking(checkanswer, exe) {
 
             //   checkanswer.firmware = data;
 
-        }).catch(function(err) {
+        }).catch(function (err) {
             reject(err);
         });
 
@@ -203,7 +206,7 @@ interface IAddress {
     apiVersion?: string;
 }
 
-class AJS {
+export default class {
     addresses: IAddress[];
     timezone: string;
     exec: string;
@@ -259,11 +262,11 @@ class AJS {
 
             }
         }
-        return new Promise<IAlarm>(function(resolve, reject) {
+        return new Promise<IAlarm>(function (resolve, reject) {
             if (!checkanswer.dev) {
 
 
-                lsusbdev().then(function(devis) {
+                lsusbdev().then(function (devis) {
 
 
                     for (let i = 0; i < devis.length; i++) {
@@ -273,17 +276,17 @@ class AJS {
                     }
 
 
-                    getAlarms(exe, checkanswer.address, checkanswer.dev).then(function(alarms) {
+                    getAlarms(exe, checkanswer.address, checkanswer.dev).then(function (alarms) {
 
                         ala.alarms = alarms;
                         resolve(ala);
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         console.error("errrrrr2");
                         reject(err);
                     });
 
 
-                }).catch(function(err) {
+                }).catch(function (err) {
                     console.error("errrrrr2");
 
                     reject(err);
@@ -320,18 +323,18 @@ class AJS {
 
         let allanswers: IAlarm[] = [];
 
-        return new Promise<IAlarm[]>(function(resolve, reject) {
+        return new Promise<IAlarm[]>(function (resolve, reject) {
 
 
-            async.each(addresses, function(iterator, callback) {
+            async.each(addresses, function (iterator, callback) {
 
-                that.alarm(iterator.uuid).then(function(ala) {
+                that.alarm(iterator.uuid).then(function (ala) {
 
                     allanswers.push(ala);
 
                     callback();
 
-                }).catch(function(err) {
+                }).catch(function (err) {
 
                     console.log("err", err);
 
@@ -339,7 +342,7 @@ class AJS {
 
                 });
 
-            }, function(err) {
+            }, function (err) {
                 if (err) {
                     // One of the iterations produced an error.
                     // All processing will now stop.
@@ -375,7 +378,7 @@ class AJS {
 
         let that = this;
 
-        return new Promise<IAPI[]>(function(resolve, reject) {
+        return new Promise<IAPI[]>(function (resolve, reject) {
 
             let checkmodel = [];
 
@@ -392,7 +395,7 @@ class AJS {
 
                 console.log("checking versions");
 
-                that.checkAll(checkmodel).then(function(a) {
+                that.checkAll(checkmodel).then(function (a) {
 
 
                     for (let i = 0; i < a.length; i++) {
@@ -409,7 +412,7 @@ class AJS {
                         }
                     }
 
-                    exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
+                    exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function (data: string) {
 
                         let apians: IAPI[] = JSON.parse(data);
                         for (let i = 0; i < apians.length; i++) {
@@ -434,16 +437,16 @@ class AJS {
 
                         resolve(apians);
 
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         console.log(err);
 
                         reject(err);
                     });
 
 
-                }).catch(function(err) {
+                }).catch(function (err) {
                     console.log(err);
-                    exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
+                    exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function (data: string) {
 
                         let apians: IAPI[] = JSON.parse(data);
                         for (let i = 0; i < apians.length; i++) {
@@ -452,7 +455,7 @@ class AJS {
                         }
 
                         resolve(apians);
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         console.log(err);
                         reject(err);
                     });
@@ -462,7 +465,7 @@ class AJS {
 
             } else {
 
-                exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function(data: string) {
+                exec(__dirname + "/aurora.sh -a \"" + prepared_addresses + "\" -t \"" + timezone + "\" -e \"" + exe + "\"").then(function (data: string) {
 
                     let apians: IAPI[] = JSON.parse(data);
                     for (let i = 0; i < apians.length; i++) {
@@ -485,7 +488,7 @@ class AJS {
 
                     resolve(apians);
 
-                }).catch(function(err) {
+                }).catch(function (err) {
                     reject(err);
                 });
 
@@ -508,7 +511,7 @@ class AJS {
 
         let checkanswer = <IAddress>{ uuid: uuid };
 
-        return new Promise<IAddress>(function(resolve, reject) {
+        return new Promise<IAddress>(function (resolve, reject) {
 
 
             for (let i = 0; i < addresses.length; i++) {
@@ -519,7 +522,7 @@ class AJS {
             }
 
 
-            lsusbdev().then(function(devis) {
+            lsusbdev().then(function (devis) {
 
 
                 for (let i = 0; i < devis.length; i++) {
@@ -528,18 +531,18 @@ class AJS {
                     }
                 }
 
-                checking(checkanswer, exe).then(function(a) {
+                checking(checkanswer, exe).then(function (a) {
                     resolve(a);
-                }).catch(function() {
-                    checking(checkanswer, exe).then(function(a) {
+                }).catch(function () {
+                    checking(checkanswer, exe).then(function (a) {
                         resolve(a);
-                    }).catch(function() {
-                        checking(checkanswer, exe).then(function(a) {
+                    }).catch(function () {
+                        checking(checkanswer, exe).then(function (a) {
                             resolve(a);
-                        }).catch(function() {
-                            checking(checkanswer, exe).then(function(a) {
+                        }).catch(function () {
+                            checking(checkanswer, exe).then(function (a) {
                                 resolve(a);
-                            }).catch(function(err) {
+                            }).catch(function (err) {
 
                                 console.log(err);
 
@@ -556,7 +559,7 @@ class AJS {
                 });
 
 
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.error("errrrrr2");
 
                 reject(err);
@@ -593,18 +596,18 @@ class AJS {
 
         let allanswers: IAddress[] = [];
 
-        return new Promise<IAddress[]>(function(resolve, reject) {
+        return new Promise<IAddress[]>(function (resolve, reject) {
 
 
-            async.each(addresses, function(iterator, callback) {
+            async.each(addresses, function (iterator, callback) {
 
-                that.check(iterator.uuid).then(function(chkansw) {
+                that.check(iterator.uuid).then(function (chkansw) {
 
                     allanswers.push(chkansw);
 
                     callback();
 
-                }).catch(function(err) {
+                }).catch(function (err) {
 
                     console.log("err", err);
 
@@ -618,7 +621,7 @@ class AJS {
 
                 });
 
-            }, function(err) {
+            }, function (err) {
                 if (err) {
                     // One of the iterations produced an error.
                     // All processing will now stop.
@@ -648,4 +651,4 @@ class AJS {
         }
     }
 }
-export = AJS
+
