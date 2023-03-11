@@ -3,7 +3,9 @@
   "version": "0.3.0",
   "main": "index.js",
   "scripts": {
-    "test": "node ./tests/main.js"
+    "test": "node ./tests/main.js",
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "repository": {
     "type": "git",
@@ -12,24 +14,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.0.0-rc.4",
-    "bluebird": "^3.1.1",
-    "lsusbdev": "^1.0.0",
+    "lsusbdev": "^1.1.1",
     "promised-exec": "^1.0.1"
   },
   "devDependencies": {
+    "@types/node": "^18.15.0",
     "chai": "^3.4.1",
-    "gulp": "^3.9.0",
-    "gulp-bump": "^1.0.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-filter": "^3.0.1",
-    "gulp-mocha": "^2.2.0",
-    "gulp-prompt": "^0.1.2",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-tag-version": "^1.3.0",
-    "gulp-typescript": "^2.10.0",
-    "gulp-util": "^3.0.7",
     "mocha": "^2.3.4",
+    "prettier": "^2.8.4",
+    "prettier-plugin-organize-imports": "^3.2.2",
     "rm-r": "^1.0.2"
   },
   "bugs": {
