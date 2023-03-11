@@ -1,0 +1,19 @@
+import Aurora from "../index";
+
+const aurorajs = new Aurora(
+  [{ uuid: "dkhlih", hub: "1-1.3", address: 2 }],
+  "Europe/Rome"
+);
+
+aurorajs
+  .data()
+  .then(function (doc) {
+    if (doc) {
+      console.log(doc);
+    } else {
+      console.log("data problems", "error", "Aurorajs");
+    }
+  })
+  .catch(function (err) {
+    console.log(err, "error", "raw");
+  });

@@ -5,15 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const os_1 = require("os");
 const lsusbdev_1 = __importDefault(require("lsusbdev"));
-const exec = require("promised-exec");
+const node_exec_promise_1 = require("node-exec-promise");
 async function getAlarms(cmd, address, dev) {
-    const data = await exec(cmd +
+    const data = await (0, node_exec_promise_1.exec)(cmd +
         " -a" +
         address +
         " -A -Y20 " +
         dev +
         " | cut -d: -f2- | sed 's/               //g'");
-    let lines = data.split("\n");
+    let lines = data.stdout.split("\n");
     let alarms = [];
     for (let i = 0; i < lines.length; i++) {
         if (lines[i] !== "No Alarm" && lines[i].length > 3) {
@@ -28,9 +28,9 @@ async function checking(checkanswer, exe) {
         checkanswer.address +
         " -Y 20 -n -f -g -p " +
         checkanswer.dev;
-    const data = await exec(cmd);
+    const data = await (0, node_exec_promise_1.exec)(cmd);
     // firmware
-    let lines = data.split("\n");
+    let lines = data.stdout.split("\n");
     for (let i = 0; i < lines.length; i++) {
         if (lines[i].split("erial Number:").length > 1) {
             if (lines[i].split("erial Number: ")[1].length > 1) {
@@ -217,7 +217,7 @@ class Aurora {
                         }
                     }
                 }
-                const data = await exec(__dirname +
+                const data = await (0, node_exec_promise_1.exec)(__dirname +
                     '/aurora.sh -a "' +
                     prepared_addresses +
                     '" -t "' +
@@ -225,7 +225,7 @@ class Aurora {
                     '" -e "' +
                     exe +
                     '"');
-                let apians = JSON.parse(data);
+                let apians = JSON.parse(data.stdout);
                 for (let i = 0; i < apians.length; i++) {
                     for (let f = 0; f < a.length; f++) {
                         if (apians[i].uid === a[f].uuid) {
@@ -248,7 +248,7 @@ class Aurora {
             }
             catch (err) {
                 console.log(err);
-                const data = await exec(__dirname +
+                const data = await (0, node_exec_promise_1.exec)(__dirname +
                     '/aurora.sh -a "' +
                     prepared_addresses +
                     '" -t "' +
@@ -256,7 +256,7 @@ class Aurora {
                     '" -e "' +
                     exe +
                     '"');
-                let apians = JSON.parse(data);
+                let apians = JSON.parse(data.stdout);
                 for (let i = 0; i < apians.length; i++) {
                     apians[i].model = "Aurora";
                     apians[i].apiVersion = this.apiVersion;
@@ -265,7 +265,7 @@ class Aurora {
             }
         }
         else {
-            const data = await exec(__dirname +
+            const data = await (0, node_exec_promise_1.exec)(__dirname +
                 '/aurora.sh -a "' +
                 prepared_addresses +
                 '" -t "' +
@@ -273,7 +273,7 @@ class Aurora {
                 '" -e "' +
                 exe +
                 '"');
-            let apians = JSON.parse(data);
+            let apians = JSON.parse(data.stdout);
             for (let i = 0; i < apians.length; i++) {
                 for (let f = 0; f < addressesoptions.length; f++) {
                     if (apians[i].uid === addressesoptions[f].uuid) {

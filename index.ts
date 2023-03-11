@@ -4,7 +4,7 @@ import { IAddress, IAlarm, Ialarm, IAPI } from "./interfaces";
 
 import lsusbdev from "lsusbdev";
 
-const exec: (string) => Promise<string> = require("promised-exec");
+import { exec } from "node-exec-promise";
 
 async function getAlarms(cmd: string, address: number, dev: string) {
   const data = await exec(
@@ -15,7 +15,7 @@ async function getAlarms(cmd: string, address: number, dev: string) {
       dev +
       " | cut -d: -f2- | sed 's/               //g'"
   );
-  let lines = data.split("\n");
+  let lines = data.stdout.split("\n");
   let alarms = <Ialarm[]>[];
   for (let i = 0; i < lines.length; i++) {
     if (lines[i] !== "No Alarm" && lines[i].length > 3) {
@@ -36,7 +36,7 @@ async function checking(checkanswer: IAddress, exe: string) {
 
   const data = await exec(cmd);
   // firmware
-  let lines = data.split("\n");
+  let lines = data.stdout.split("\n");
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].split("erial Number:").length > 1) {
       if (lines[i].split("erial Number: ")[1].length > 1) {
@@ -247,7 +247,7 @@ export default class Aurora {
             '"'
         );
 
-        let apians: IAPI[] = JSON.parse(data);
+        let apians: IAPI[] = JSON.parse(data.stdout);
         for (let i = 0; i < apians.length; i++) {
           for (let f = 0; f < a.length; f++) {
             if (apians[i].uid === a[f].uuid) {
@@ -277,7 +277,7 @@ export default class Aurora {
             '"'
         );
 
-        let apians: IAPI[] = JSON.parse(data);
+        let apians: IAPI[] = JSON.parse(data.stdout);
         for (let i = 0; i < apians.length; i++) {
           apians[i].model = "Aurora";
           apians[i].apiVersion = this.apiVersion;
@@ -297,7 +297,7 @@ export default class Aurora {
           '"'
       );
 
-      let apians: IAPI[] = JSON.parse(data);
+      let apians: IAPI[] = JSON.parse(data.stdout);
       for (let i = 0; i < apians.length; i++) {
         for (let f = 0; f < addressesoptions.length; f++) {
           if (apians[i].uid === addressesoptions[f].uuid) {
