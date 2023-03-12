@@ -1,6 +1,6 @@
 {
   "name": "aurorajs",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "main": "index.js",
   "scripts": {
     "test": "node ./tests/main.js",
