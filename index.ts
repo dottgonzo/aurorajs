@@ -349,7 +349,6 @@ export default class Aurora {
       const chk = await checking(checkanswer, exe);
       return chk;
     } catch (err) {
-      console.log(err);
       try {
         const chk = await checking(checkanswer, exe);
         return chk;
@@ -366,8 +365,6 @@ export default class Aurora {
               const chk = await checking(checkanswer, exe);
               return chk;
             } catch (err) {
-              console.log(err);
-
               checkanswer.serial = "none";
               checkanswer.firmware = "none";
               checkanswer.dateprod = "none";
