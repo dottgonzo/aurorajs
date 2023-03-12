@@ -184,6 +184,7 @@ class Aurora {
         let timezone = this.timezone;
         let addressesoptions = this.addresses;
         let prepared_addresses = prepare_address(addressesoptions);
+        let apians;
         let checkmodel = [];
         for (let i = 0; i < addressesoptions.length; i++) {
             if (!addressesoptions[i].serial ||
@@ -200,7 +201,7 @@ class Aurora {
         if (checkmodel.length > 0) {
             console.log("checking versions");
             try {
-                const a = await this.checkAll(checkmodel);
+                const a = await this.checkAll();
                 for (let i = 0; i < a.length; i++) {
                     if (a[i].serial &&
                         a[i].serial !== "none" &&
@@ -225,7 +226,7 @@ class Aurora {
                     '" -e "' +
                     exe +
                     '"');
-                let apians = JSON.parse(data.stdout);
+                apians = JSON.parse(data.stdout);
                 for (let i = 0; i < apians.length; i++) {
                     for (let f = 0; f < a.length; f++) {
                         if (apians[i].uid === a[f].uuid) {
@@ -244,7 +245,6 @@ class Aurora {
                         }
                     }
                 }
-                return apians;
             }
             catch (err) {
                 console.log(err);
@@ -256,12 +256,11 @@ class Aurora {
                     '" -e "' +
                     exe +
                     '"');
-                let apians = JSON.parse(data.stdout);
+                apians = JSON.parse(data.stdout);
                 for (let i = 0; i < apians.length; i++) {
                     apians[i].model = "Aurora";
                     apians[i].apiVersion = this.apiVersion;
                 }
-                return apians;
             }
         }
         else {
@@ -273,7 +272,7 @@ class Aurora {
                 '" -e "' +
                 exe +
                 '"');
-            let apians = JSON.parse(data.stdout);
+            apians = JSON.parse(data.stdout);
             for (let i = 0; i < apians.length; i++) {
                 for (let f = 0; f < addressesoptions.length; f++) {
                     if (apians[i].uid === addressesoptions[f].uuid) {
@@ -292,20 +291,19 @@ class Aurora {
                     }
                 }
             }
-            return apians;
         }
+        return apians;
     }
     async check(uuid) {
         // get model, firmware, production date
         if (!uuid)
             throw Error("no uid provided");
         let exe = this.exec;
-        let addresses = this.addresses;
         let checkanswer = { uuid: uuid };
-        for (let i = 0; i < addresses.length; i++) {
-            if (addresses[i].uuid === uuid) {
-                checkanswer.hub = addresses[i].hub;
-                checkanswer.address = addresses[i].address;
+        for (let i = 0; i < this.addresses.length; i++) {
+            if (this.addresses[i].uuid === uuid) {
+                checkanswer.hub = this.addresses[i].hub;
+                checkanswer.address = this.addresses[i].address;
             }
         }
         const devis = await (0, lsusbdev_1.default)();
@@ -350,35 +348,14 @@ class Aurora {
             }
         }
     }
-    async checkAll(adds) {
-        let addresses = [];
-        let thisaddresses = this.addresses;
-        if (adds) {
-            for (let i = 0; i < thisaddresses.length; i++) {
-                for (let a = 0; a < adds.length; a++) {
-                    if (thisaddresses[i].uuid === adds[a]) {
-                        addresses.push(thisaddresses[i]);
-                    }
-                }
-            }
-        }
-        else {
-            addresses = thisaddresses;
-        }
+    async checkAll() {
         let allanswers = [];
-        for (const iterator of addresses) {
-            try {
-                const chkansw = await this.check(iterator.uuid);
-                allanswers.push(chkansw);
+        for (const iterator of this.addresses) {
+            const chkansw = await this.check(iterator.uuid);
+            if (!this.addresses.find((x) => x.uuid === iterator.uuid)) {
+                this.addresses.push(chkansw);
             }
-            catch (err) {
-                console.log("err", err);
-                for (let i = 0; i < thisaddresses.length; i++) {
-                    if (thisaddresses[i].uuid === iterator.uuid) {
-                        allanswers.push(thisaddresses[i]);
-                    }
-                }
-            }
+            allanswers.push(chkansw);
         }
         return allanswers;
     }

@@ -194,7 +194,7 @@ export default class Aurora {
     let addressesoptions = this.addresses;
 
     let prepared_addresses = prepare_address(addressesoptions);
-
+    let apians: IAPI[];
     let checkmodel = [];
 
     for (let i = 0; i < addressesoptions.length; i++) {
@@ -216,7 +216,7 @@ export default class Aurora {
       console.log("checking versions");
 
       try {
-        const a = await this.checkAll(checkmodel);
+        const a = await this.checkAll();
 
         for (let i = 0; i < a.length; i++) {
           if (
@@ -247,7 +247,7 @@ export default class Aurora {
             '"'
         );
 
-        let apians: IAPI[] = JSON.parse(data.stdout);
+        apians = JSON.parse(data.stdout);
         for (let i = 0; i < apians.length; i++) {
           for (let f = 0; f < a.length; f++) {
             if (apians[i].uid === a[f].uuid) {
@@ -262,8 +262,6 @@ export default class Aurora {
             }
           }
         }
-
-        return apians;
       } catch (err) {
         console.log(err);
         const data = await exec(
@@ -277,13 +275,11 @@ export default class Aurora {
             '"'
         );
 
-        let apians: IAPI[] = JSON.parse(data.stdout);
+        apians = JSON.parse(data.stdout);
         for (let i = 0; i < apians.length; i++) {
           apians[i].model = "Aurora";
           apians[i].apiVersion = this.apiVersion;
         }
-
-        return apians;
       }
     } else {
       const data = await exec(
@@ -297,7 +293,7 @@ export default class Aurora {
           '"'
       );
 
-      let apians: IAPI[] = JSON.parse(data.stdout);
+      apians = JSON.parse(data.stdout);
       for (let i = 0; i < apians.length; i++) {
         for (let f = 0; f < addressesoptions.length; f++) {
           if (apians[i].uid === addressesoptions[f].uuid) {
@@ -316,9 +312,8 @@ export default class Aurora {
           }
         }
       }
-
-      return apians;
     }
+    return apians;
   }
 
   async check(uuid: string) {
@@ -328,14 +323,12 @@ export default class Aurora {
 
     let exe = this.exec;
 
-    let addresses = this.addresses;
-
     let checkanswer = <IAddress>{ uuid: uuid };
 
-    for (let i = 0; i < addresses.length; i++) {
-      if (addresses[i].uuid === uuid) {
-        checkanswer.hub = addresses[i].hub;
-        checkanswer.address = addresses[i].address;
+    for (let i = 0; i < this.addresses.length; i++) {
+      if (this.addresses[i].uuid === uuid) {
+        checkanswer.hub = this.addresses[i].hub;
+        checkanswer.address = this.addresses[i].address;
       }
     }
     const devis = await lsusbdev();
@@ -377,36 +370,15 @@ export default class Aurora {
     }
   }
 
-  async checkAll(adds?: string[]) {
-    let addresses: IAddress[] = [];
-    let thisaddresses = this.addresses;
-    if (adds) {
-      for (let i = 0; i < thisaddresses.length; i++) {
-        for (let a = 0; a < adds.length; a++) {
-          if (thisaddresses[i].uuid === adds[a]) {
-            addresses.push(thisaddresses[i]);
-          }
-        }
-      }
-    } else {
-      addresses = thisaddresses;
-    }
-
+  async checkAll() {
     let allanswers: IAddress[] = [];
 
-    for (const iterator of addresses) {
-      try {
-        const chkansw = await this.check(iterator.uuid);
-        allanswers.push(chkansw);
-      } catch (err) {
-        console.log("err", err);
-
-        for (let i = 0; i < thisaddresses.length; i++) {
-          if (thisaddresses[i].uuid === iterator.uuid) {
-            allanswers.push(thisaddresses[i]);
-          }
-        }
+    for (const iterator of this.addresses) {
+      const chkansw = await this.check(iterator.uuid);
+      if (!this.addresses.find((x) => x.uuid === iterator.uuid)) {
+        this.addresses.push(chkansw);
       }
+      allanswers.push(chkansw);
     }
 
     return allanswers;
