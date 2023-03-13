@@ -117,63 +117,42 @@ class Aurora {
         let exe = this.exec;
         let timezone = this.timezone;
         let checkanswer = { uuid: uuid };
-        let addresses = this.addresses;
         let apiVersion = this.apiVersion;
         let ala = {
             model: "Aurora",
             apiVersion: apiVersion,
             createdAt: new Date().getTime(),
         };
-        for (let i = 0; i < addresses.length; i++) {
-            if (addresses[i].uuid === uuid) {
-                checkanswer.hub = addresses[i].hub;
-                checkanswer.address = addresses[i].address;
-                if (addresses[i].dev)
-                    checkanswer.dev = addresses[i].dev;
-                if (addresses[i].firmware)
-                    ala.firmware = addresses[i].firmware;
-                if (addresses[i].dateprod)
-                    ala.dateprod = addresses[i].dateprod;
-                if (addresses[i].serial)
-                    ala.serial = addresses[i].serial;
-                if (addresses[i].address)
-                    ala.address = addresses[i].address;
-                if (addresses[i].pn)
-                    ala.pn = addresses[i].pn;
-            }
-        }
+        const address = this.addresses.find((f) => f.uuid === uuid);
+        if (!address)
+            throw new Error("inverter not configured");
+        checkanswer.hub = address.hub;
+        checkanswer.address = address.address;
+        if (address.dev)
+            checkanswer.dev = address.dev;
+        if (address.firmware)
+            ala.firmware = address.firmware;
+        if (address.dateprod)
+            ala.dateprod = address.dateprod;
+        if (address.serial)
+            ala.serial = address.serial;
+        if (address.address)
+            ala.address = address.address;
+        if (address.pn)
+            ala.pn = address.pn;
         if (!checkanswer.dev) {
             const devis = await (0, lsusbdev_1.default)();
-            for (let i = 0; i < devis.length; i++) {
-                if (devis[i].hub === checkanswer.hub) {
-                    checkanswer.dev = devis[i].dev;
-                }
-            }
-            const alarms = await getAlarms(exe, checkanswer.address, checkanswer.dev);
-            ala.alarms = alarms;
-            return ala;
+            checkanswer.dev = devis.find((f) => f.hub === checkanswer.hub)?.dev;
         }
-        else {
-            throw new Error("no dev found for " + checkanswer.address);
-        }
+        if (!checkanswer.dev)
+            throw new Error("Error getting data from inverter");
+        const alarms = await getAlarms(exe, checkanswer.address, checkanswer.dev);
+        ala.alarms = alarms;
+        return ala;
     }
-    async alarms(adds) {
-        let addresses = [];
-        let thisaddresses = this.addresses;
-        if (adds) {
-            for (let i = 0; i < thisaddresses.length; i++) {
-                for (let a = 0; a < adds.length; a++) {
-                    if (thisaddresses[i].uuid === adds[a]) {
-                        addresses.push(thisaddresses[i]);
-                    }
-                }
-            }
-        }
-        else {
-            addresses = thisaddresses;
-        }
+    async alarms() {
         let allanswers = [];
-        for (const iterator of addresses) {
+        for (const iterator of this.addresses) {
             const ala = await this.alarm(iterator.uuid);
             allanswers.push(ala);
         }
